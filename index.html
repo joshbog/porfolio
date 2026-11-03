@@ -1,0 +1,956 @@
+<title>Joshua Nwabogor</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Courier+Prime:wght@400;700&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: a broadsheet. Masthead + dateline, ruled columns, articles with taped paper cuttings; page-turn between views. Single paper look (Enmero's #F9F2E9 ground). */
+:root{
+  --paper:#F9F2E9; --paper-2:#EDE4D6; --sheet:#FFFCF6; --hair:#D8C9B1; --line:#E6DCCD;
+  --ink:#1B1712; --ink-2:#3F382F; --muted:#6D6253; --red:#A3301F; --tape:rgba(222,203,146,.82);
+  --f-mast:"UnifrakturMaguntia", "Old English Text MT", Georgia, serif;
+  --f-head:"Old Standard TT", "Times New Roman", Georgia, serif;
+  --f-body:"Newsreader", Georgia, "Times New Roman", serif;
+  --f-hand:"Caveat", "Bradley Hand", "Segoe Print", cursive;
+  --f-type:"Courier Prime", "Courier New", ui-monospace, monospace;
+  --wrap:1240px; --read:68ch;
+  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper) var(--noise);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--paper)}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+h1,h2,h3,h4{font-family:var(--f-head);font-weight:700;line-height:1.05;text-wrap:balance;margin:0;letter-spacing:-.005em}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin-inline:auto}
+.type{font-family:var(--f-type);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.kicker{font-family:var(--f-type);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:700}
+.dbl{border:0;border-top:3px double var(--ink);margin:0}
+.thick{border:0;border-top:4px solid var(--ink);margin:0}
+
+/* ---- masthead ---- */
+.mast{padding-block:22px 4px;border-bottom:3px double var(--ink)}
+.mast h1{font-family:var(--f-mast);font-weight:400;font-size:clamp(46px,9.4vw,124px);line-height:.95;text-align:center;letter-spacing:0;white-space:nowrap}
+.mast h1 a{text-decoration:none}
+.motto{text-align:center;font-family:var(--f-head);font-style:italic;font-size:17px;color:var(--ink-2);margin:4px 0 12px}
+.navbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--paper) var(--noise);border-bottom:1px solid var(--ink)}
+.navbar .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px 20px;padding-block:8px}
+.navbar .date{font-family:var(--f-type);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:14px;min-width:0}
+.navbar .links{display:flex;gap:4px 24px;flex-wrap:wrap;justify-content:center}
+.navbar .links a{font-family:var(--f-type);font-size:13px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:4px 2px;border-bottom:2px solid transparent}
+.navbar .links a:hover{color:var(--red)}
+.navbar .links a[aria-current="page"]{border-bottom-color:var(--red);color:var(--red)}
+.navbar .mini{font-family:var(--f-mast);font-size:22px;letter-spacing:0;text-transform:none;text-decoration:none;color:var(--ink);display:none;line-height:1}
+.scrolled .navbar .mini{display:inline}
+.scrolled .navbar #today{display:none}
+.navbar .cta{justify-self:end}
+@media (max-width:760px){
+  .navbar .wrap{grid-template-columns:1fr auto;}
+  .navbar .date{grid-column:1/-1;justify-content:center;order:-1;font-size:11.5px}
+  .navbar .links{justify-content:flex-start;gap:4px 16px}
+  .navbar .links a{font-size:12px;letter-spacing:.1em}
+  .scrolled .navbar .date{display:none}
+}
+main{padding-block:28px 48px;min-height:60vh}
+main>.view-work .ticker{}
+
+/* ---- paper patches (images) ---- */
+.patch{position:relative;margin:0;background:var(--sheet);padding:9px 9px 10px;transform:rotate(var(--tilt,0deg));
+  box-shadow:none;max-width:100%;transition:transform .35s ease}
+.patch::before,.patch::after{content:"";position:absolute;z-index:2;width:88px;height:24px;background:var(--tape);
+  -webkit-mask:linear-gradient(90deg,transparent 0 3px,#000 3px calc(100% - 3px),transparent 0),repeating-linear-gradient(0deg,#000 0 3px,transparent 3px 5px);
+  -webkit-mask-composite:source-over}
+.patch.t1::before{top:-11px;left:50%;transform:translateX(-50%) rotate(-2.5deg)}
+.patch.t1::after{display:none}
+.patch.t2::before{top:-8px;left:-22px;transform:rotate(-38deg)}
+.patch.t2::after{top:-8px;right:-22px;transform:rotate(38deg)}
+.patch .frame{position:relative;overflow:hidden;background:#fff}
+.patch img{display:block;width:auto;max-width:100%;height:auto;margin-inline:auto}
+.patch figcaption{font-family:var(--f-type);font-size:12.5px;line-height:1.4;color:var(--ink-2);padding:9px 2px 0;display:flex;gap:8px}
+.patch figcaption b{color:var(--red);font-weight:700;white-space:nowrap}
+.patch.tall .frame{max-height:620px;overflow-y:auto}
+.frame.missing{min-height:160px;background:repeating-linear-gradient(135deg,var(--paper-2) 0 8px,transparent 8px 16px)}
+.frame.missing img{display:none}
+/* torn-paper cuttings (front page) */
+.tear{position:relative;margin:0;transform:rotate(var(--tilt,0deg));transition:transform .35s ease}
+.tear .paper{position:absolute;inset:-5px;filter:url(#fiber)}
+.tear .paper i{position:absolute;inset:0;background:#FCFAF4;clip-path:var(--outer)}
+.tear .frame{position:relative;clip-path:var(--inner);aspect-ratio:16/10;overflow:hidden;background:#ddd}
+.tear .frame.sq{aspect-ratio:1}
+.tear img{display:block;width:100%;height:100%;object-fit:cover;filter:none;transition:filter .5s ease}
+a:hover .tear img,a:focus-visible .tear img{filter:grayscale(1) contrast(1.1)}
+a:hover .tear{transform:rotate(0deg) scale(1.01)}
+.sig .tear{width:60px;flex:none}
+a:hover .patch{transform:rotate(0deg) scale(1.01)}
+
+/* ---- front page ---- */
+.front{display:grid;grid-template-columns:minmax(0,1fr);gap:0;border-bottom:1px solid var(--ink)}
+.front>*{padding-block:22px 28px}
+.front .lead{padding-right:0}
+.front aside{padding-left:28px}
+@media (max-width:900px){.front{grid-template-columns:1fr}.front .lead{padding-right:0;border-right:0;border-bottom:1px solid var(--ink)}.front aside{padding-left:0}}
+.lead a.story{text-decoration:none;display:grid;gap:14px}
+.lead h2{font-size:clamp(36px,5.4vw,64px);line-height:.98}
+.lead a.story:hover h2{color:var(--red)}
+.deck{font-family:var(--f-head);font-style:italic;font-size:clamp(19px,2vw,23px);line-height:1.3;color:var(--ink-2)}
+.byline{font-family:var(--f-type);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:5px 0}
+.lead-body{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:36px;align-items:center}
+@media (max-width:640px){.lead-body{grid-template-columns:1fr}}
+.cols{column-count:2;column-gap:24px;column-rule:1px solid var(--hair);text-align:justify;hyphens:auto}
+.cols p+p{margin-top:.6em;text-indent:1.4em}
+@media (max-width:640px){.cols{column-count:1}}
+.drop::first-letter{float:left;font-family:var(--f-head);font-weight:700;font-size:4.1em;line-height:.82;padding:5px 8px 0 0;color:var(--red)}
+.figures{display:flex;gap:0;border:1px solid var(--ink);margin-top:6px}
+.figures div{flex:1;padding:10px 12px;display:grid;gap:2px;min-width:0}
+.figures div+div{border-left:1px solid var(--hair)}
+.figures b{font-family:var(--f-head);font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.figures span{font-family:var(--f-type);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);line-height:1.3}
+
+.editorial{border:2px solid var(--ink);padding:16px 18px 18px;background:var(--sheet);display:grid;gap:12px}
+.editorial h3{font-size:26px;text-align:center;border-bottom:1px solid var(--ink);padding-bottom:8px}
+.editorial ol{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.editorial li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:start}
+.editorial li b{font-family:var(--f-mast);font-weight:400;font-size:44px;line-height:.9;color:var(--red);text-align:center}
+.editorial li strong{font-family:var(--f-head);font-size:19px;display:block}
+.editorial li span{font-size:15.5px;color:var(--ink-2)}
+.index{border-top:4px solid var(--ink);padding-top:10px;display:grid;gap:6px}
+.index a{display:flex;justify-content:space-between;gap:10px;text-decoration:none;border-bottom:1px dotted var(--hair);padding:5px 0;font-size:16px}
+.index a span:last-child{font-family:var(--f-type);font-size:12px;color:var(--muted);white-space:nowrap}
+.index a:hover{color:var(--red)}
+
+
+/* FAAC ticker */
+.ticker{display:flex;align-items:stretch;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);margin:-28px 0 0;background:var(--sheet);overflow:hidden}
+.tk-tag{flex:none;background:var(--red);color:var(--paper);font-family:var(--f-type);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:9px 14px;display:flex;align-items:center}
+.tk-window{flex:1;overflow:hidden;min-width:0;-webkit-mask:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent);mask:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent)}
+.tk-track{display:flex;width:max-content;animation:tick 48s linear infinite}
+.ticker:hover .tk-track{animation-play-state:paused}
+.tk-run{display:flex;align-items:center;white-space:nowrap;padding-right:40px}
+.tk-lead{font-family:var(--f-head);font-style:italic;font-size:16px;padding:0 22px 0 18px}
+.tk-item{font-size:15.5px;color:var(--ink-2);padding:8px 26px 8px 0;display:inline-flex;align-items:center;gap:8px}
+.tk-item+.tk-item::before,.tk-lead+.tk-item::before{content:"■";color:var(--red);font-size:9px;margin-right:18px}
+.tk-item b{font-family:var(--f-mast);font-weight:400;font-size:24px;color:var(--red);line-height:1}
+.tk-item strong{font-family:var(--f-head);color:var(--ink);font-size:16px}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.tk-window{overflow-x:auto}}
+.teaser{display:grid;gap:12px;text-decoration:none;margin-top:26px;border-top:4px solid var(--ink);padding-top:12px}
+.teaser .patch{max-width:240px;justify-self:center;margin-top:8px}
+.teaser h3{font-size:24px}
+.teaser p{font-size:16px;color:var(--ink-2)}
+.teaser:hover h3{color:var(--red)}
+.sechead{display:flex;align-items:center;gap:14px;margin:34px 0 0}
+.sechead h2{font-family:var(--f-head);font-size:15px;letter-spacing:.24em;text-transform:uppercase;white-space:nowrap}
+.sechead::before,.sechead::after{content:"";flex:1;border-top:3px double var(--ink)}
+.stories{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--ink)}
+.stories>a{text-decoration:none;display:grid;gap:12px;align-content:start;grid-template-rows:auto auto auto 1fr auto;padding:22px 22px 26px;border-right:1px solid var(--hair);min-width:0}
+.stories>a:nth-child(3n){border-right:0}
+.stories>a:nth-child(n+4){border-top:1px solid var(--hair)}
+.stories h3{font-size:clamp(22px,2.2vw,27px)}
+.stories>a:hover h3{color:var(--red)}
+.stories p{font-size:16.5px;color:var(--ink-2)}
+.stories>a:first-child{padding-left:0}
+.stories>a:nth-child(3n+1){padding-left:0}.stories>a:nth-child(3n){padding-right:0}
+@media (max-width:900px){.stories{grid-template-columns:repeat(2,minmax(0,1fr))}.stories>a{padding:20px 0!important;border-right:0}.stories>a:nth-child(odd){padding-right:20px!important;border-right:1px solid var(--hair)}.stories>a:nth-child(even){padding-left:20px!important}.stories>a:nth-child(n+3){border-top:1px solid var(--hair)}}
+@media (max-width:600px){.stories{grid-template-columns:1fr}.stories>a{padding:20px 0!important;border-right:0!important}.stories>a+a{border-top:1px solid var(--hair)}}
+
+
+/* 5 stories: three across, then two wider */
+@media (min-width:901px){
+  .stories{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .stories>a{grid-column:span 2}
+  .stories>a:nth-child(n+4){grid-column:span 3}
+  .stories>a:nth-child(3n),.stories>a:nth-child(3n+1){padding-left:22px;padding-right:22px}
+  .stories>a:nth-child(1),.stories>a:nth-child(4){padding-left:0}
+  .stories>a:nth-child(3),.stories>a:nth-child(5){padding-right:0;border-right:0}
+  .stories>a:nth-child(4){border-right:1px solid var(--hair)}
+  .stories>a:nth-child(n+4) .cut .frame{aspect-ratio:16/8}
+}
+.strip{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr) auto;align-items:center;gap:20px 36px;text-decoration:none;
+  border:3px double var(--ink);background:var(--sheet);padding:22px 28px;margin-top:28px}
+.strip-head{display:grid;gap:6px}
+.strip h3{font-size:clamp(26px,3vw,38px);text-transform:uppercase;letter-spacing:.02em}
+.strip p{font-size:17.5px;color:var(--ink-2);border-left:1px solid var(--hair);padding-left:28px}
+.strip:hover h3{color:var(--red)}
+@media (max-width:820px){.strip{grid-template-columns:1fr;text-align:left}.strip p{border-left:0;padding-left:0}}
+.letters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-bottom:1px solid var(--ink)}
+.letters article{padding:20px 22px 24px;display:grid;gap:12px;align-content:start;min-width:0}
+.letters article+article{border-left:1px solid var(--hair)}
+.letters article:first-child{padding-left:0}.letters article:last-child{padding-right:0}
+.letters h3{font-size:21px;font-style:italic;font-weight:400}
+.letters p{font-size:16px;text-align:justify;hyphens:auto}
+.letters p::before{content:"Sir, — ";font-variant:small-caps;font-weight:600}
+.sig{display:flex;align-items:center;gap:12px}
+.sig b{font-family:var(--f-head);display:block;font-size:16px}
+.sig span{font-family:var(--f-type);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+@media (max-width:860px){.letters{grid-template-columns:1fr}.letters article{padding:20px 0!important}.letters article+article{border-left:0;border-top:1px solid var(--hair)}}
+
+.desk{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:0;border-bottom:4px solid var(--ink)}
+.desk>div{padding-block:22px 28px}
+.desk .note{padding-right:28px;border-right:1px solid var(--ink)}
+.desk .note .cols{margin-top:10px}
+.desk .classified{padding-left:28px}
+@media (max-width:860px){.desk{grid-template-columns:1fr}.desk .note{padding-right:0;border-right:0;border-bottom:1px solid var(--ink)}.desk .classified{padding-left:0}}
+.ad{border:3px double var(--ink);padding:16px 18px;display:grid;gap:10px;text-align:center;background:var(--sheet)}
+.ad h3{font-size:clamp(30px,3.2vw,40px);text-transform:uppercase;letter-spacing:.02em}
+.ad p{font-size:16px}
+.ad .btns{margin-top:6px}
+.ad .addr{font-family:var(--f-type);font-size:16px;font-weight:700;word-break:break-all;user-select:all}
+.btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn,.more,.cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font-family:var(--f-type);font-weight:700;font-size:13.5px;letter-spacing:.08em;text-transform:uppercase;
+  padding:12px 20px;min-height:46px;border:2px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;
+  box-shadow:4px 4px 0 var(--red);transition:transform .15s ease,box-shadow .15s ease,background .15s ease;justify-self:start;width:max-content;max-width:100%}
+.btn:hover,.more:hover,.cta:hover,a:hover>.more,a:hover .more,.btn:focus-visible,.cta:focus-visible{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);background:var(--red);border-color:var(--red);color:var(--paper)}
+.btn:active,.cta:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper);border-color:var(--ink);box-shadow:6px 6px 0 var(--red)}
+.cta{padding:9px 16px;min-height:40px;font-size:12.5px;box-shadow:3px 3px 0 var(--red)}
+.cta[aria-current="page"]{background:var(--red);border-color:var(--red)}
+.toast{font-family:var(--f-type);font-size:12px;color:var(--red);min-height:1.2em}
+
+/* ---- article (case study) ---- */
+.art-head{display:grid;gap:14px;padding-block:8px 22px;border-bottom:1px solid var(--ink);text-align:center;justify-items:center}
+.art-head h1{font-size:clamp(38px,6.4vw,82px);line-height:.98;max-width:18ch}
+.art-head .deck{max-width:56ch}
+.art-head .byline{width:100%;max-width:760px}
+.back{font-family:var(--f-type);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
+.back:hover{color:var(--red)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--ink);margin-top:22px;background:var(--sheet)}
+.facts div{padding:10px 12px;display:grid;gap:3px;min-width:0;align-content:start;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.facts dt{font-family:var(--f-type);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+.facts dd{margin:0;font-size:15.5px;line-height:1.4}
+.art-hero{margin:34px auto 6px;max-width:980px}
+.art-body{display:grid;gap:44px;padding-block:44px 20px}
+.blk{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:16px 40px}
+@media (max-width:860px){.blk{grid-template-columns:1fr}}
+.blk>h2{font-size:15px;letter-spacing:.2em;text-transform:uppercase;border-top:4px solid var(--ink);padding-top:10px;align-self:start;position:sticky;top:64px;line-height:1.3}
+@media (max-width:860px){.blk>h2{position:static}}
+.blk .txt{display:grid;gap:14px;max-width:var(--read);min-width:0;border-top:1px solid var(--ink);padding-top:12px}
+@media (max-width:860px){.blk .txt{border-top:0;padding-top:0}}
+.blk ul{margin:0;padding-left:0;list-style:none;display:grid;gap:7px}
+.blk li{padding-left:22px;position:relative}
+.blk li::before{content:"■";position:absolute;left:0;top:.05em;font-size:.7em;color:var(--red)}
+.blk .figs{display:grid;gap:34px;grid-column:2;min-width:0;padding-top:16px}
+@media (max-width:860px){.blk .figs{grid-column:1}}
+.figs.two{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:34px 26px}
+@media (max-width:640px){.figs.two{grid-template-columns:1fr}}
+.callout{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:12px 4px;display:grid;gap:4px}
+.callout b{font-family:var(--f-type);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.callout p{font-family:var(--f-head);font-style:italic;font-size:21px;line-height:1.35}
+.pills{font-family:var(--f-type);font-size:14px;line-height:1.8;color:var(--ink-2)}
+.pills .pill+.pill::before{content:" · ";color:var(--red);font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));border:1px solid var(--ink);background:var(--sheet)}
+.stats div{padding:10px 12px;display:grid;gap:2px;border-right:1px solid var(--hair)}
+.stats b{font-family:var(--f-head);font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums}
+.stats span{font-family:var(--f-type);font-size:11.5px;letter-spacing:.03em;color:var(--muted);line-height:1.35;text-transform:uppercase}
+.small{font-size:15px;color:var(--muted);font-style:italic}
+.aud{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.aud div{padding:0 14px;display:grid;gap:5px;align-content:start}
+.aud div:first-child{padding-left:0}
+.aud div+div{border-left:1px solid var(--hair)}
+.aud h4{font-size:19px}
+.aud p{font-size:15.5px;color:var(--ink-2)}
+.aud .type{color:var(--red)}
+@media (max-width:700px){.aud{grid-template-columns:1fr!important;gap:14px}.aud div{padding:0}.aud div+div{border-left:0;border-top:1px solid var(--hair);padding-top:12px}}
+.notice{border:1px dashed var(--ink-2);padding:14px 16px;font-style:italic}
+.next{display:grid;gap:6px;text-decoration:none;border-top:4px solid var(--ink);border-bottom:1px solid var(--ink);padding:16px 0;margin-top:30px;text-align:center}
+.next h3{font-size:clamp(26px,3.6vw,40px)}
+.next:hover h3{color:var(--red)}
+.btns.l{justify-content:flex-start}
+
+/* results chart */
+.res{display:grid;gap:12px;font-variant-numeric:tabular-nums;border:1px solid var(--ink);padding:14px;background:var(--sheet)}
+.res .leg{display:flex;gap:18px;font-family:var(--f-type);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.res .leg i{display:inline-block;width:14px;height:10px;margin-right:6px;vertical-align:-1px;border:1px solid var(--ink)}
+.res .row{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr) 58px;gap:6px 12px;align-items:center}
+@media (max-width:560px){.res .row{grid-template-columns:minmax(0,1fr) 58px}.res .row .bars{grid-column:1/-1;grid-row:2}}
+.res .lbl{font-size:15px}
+.res .bars{display:grid;gap:3px}
+.res .bar{height:11px;display:flex;align-items:center;min-width:2px}
+.res .bar span{font-family:var(--f-type);font-size:11.5px;color:var(--ink-2);margin-left:calc(100% + 6px);white-space:nowrap}
+.res .c,.res .leg .c{background:repeating-linear-gradient(135deg,var(--ink-2) 0 1px,transparent 1px 4px);border:1px solid var(--ink-2)}
+.res .v,.res .leg .v{background:var(--ink)}
+.res .lift{font-family:var(--f-head);font-weight:700;font-size:18px;color:var(--red);text-align:right}
+
+/* process + about + contact */
+.feature-head{text-align:center;display:grid;gap:12px;justify-items:center;padding-block:10px 24px;border-bottom:1px solid var(--ink)}
+.feature-head h1{font-size:clamp(38px,6vw,76px);max-width:16ch}
+
+/* process sketch */
+.sketch{position:relative;background:#FFFDF6;
+  background-image:linear-gradient(90deg,transparent 46px,rgba(163,48,31,.35) 46px 47px,transparent 47px),repeating-linear-gradient(180deg,transparent 0 31px,rgba(70,110,160,.16) 31px 32px);
+  padding:18px 18px 10px 54px}
+.sketch svg{display:block;width:100%;height:auto;overflow:visible}
+.sketch .hw{font-family:var(--f-hand);font-size:34px;font-weight:500;fill:var(--ink);text-anchor:middle}
+.sketch .hw.sm{font-size:25px}
+.sketch .hw.red{fill:var(--red)}
+.sketch .num ellipse{fill:none;stroke:var(--red);stroke-width:2}
+.sketch .num text{font-family:var(--f-hand);font-weight:700;font-size:24px;fill:var(--red);text-anchor:middle}
+.sk-tall{display:none!important;max-width:360px;margin-inline:auto}
+@media (max-width:640px){.sk-wide{display:none!important}.sk-tall{display:block!important}.sketch{padding-left:40px;background-image:linear-gradient(90deg,transparent 30px,rgba(163,48,31,.35) 30px 31px,transparent 31px),repeating-linear-gradient(180deg,transparent 0 31px,rgba(70,110,160,.16) 31px 32px)}}
+@media (prefers-reduced-motion: no-preference){
+  .sketch path{stroke-dashoffset:0}
+  .sketchfig .sketch svg>g:first-of-type{animation:inkin 1.4s ease .2s both}
+}
+@keyframes inkin{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:4px solid var(--ink)}
+.steps div{padding:20px 18px 24px;display:grid;gap:10px;align-content:start;min-width:0}
+.steps div+div{border-left:1px solid var(--hair)}
+.steps div:first-child{padding-left:0}.steps div:last-child{padding-right:0}
+.steps b{font-family:var(--f-mast);font-weight:400;font-size:56px;line-height:.9;color:var(--red)}
+.steps h3{font-size:24px}
+.steps p{font-size:16px;color:var(--ink-2);font-style:italic}
+.steps .pills{font-size:13.5px}
+@media (max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.steps div{padding:18px 16px!important}.steps div:nth-child(3){border-left:0}.steps div:nth-child(n+3){border-top:1px solid var(--hair)}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}.steps div{padding:18px 0!important;border-left:0!important}.steps div+div{border-top:1px solid var(--hair)}}
+.profile{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.5fr);gap:40px;padding-block:28px;border-bottom:4px solid var(--ink)}
+@media (max-width:820px){.profile{grid-template-columns:1fr;gap:30px}}
+.profile .patch{max-width:380px;justify-self:center}
+.profile .cols{column-count:2}
+@media (max-width:640px){.profile .cols{column-count:1}}
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--ink);margin-top:22px;background:var(--sheet)}
+.skills div{padding:12px 14px;min-width:0}
+.skills div+div{border-left:1px solid var(--hair)}
+.skills h4{font-family:var(--f-type);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:6px;font-weight:700}
+.skills ul{list-style:none;margin:0;padding:0;font-size:16px;display:grid;gap:2px}
+@media (max-width:600px){.skills{grid-template-columns:1fr}.skills div+div{border-left:0;border-top:1px solid var(--hair)}}
+.contact{display:grid;gap:26px;padding-block:20px;justify-items:center;text-align:center}
+.contact .ad{max-width:640px;width:100%;padding:26px}
+.contact .ad h3{font-size:clamp(40px,7vw,72px)}
+.cgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;border-top:4px solid var(--ink);border-bottom:1px solid var(--ink)}
+.cgrid div{padding:16px 18px;display:grid;gap:6px;align-content:start}
+.cgrid div+div{border-left:1px solid var(--hair)}
+.cgrid a{text-decoration:none}
+.cgrid a:hover{color:var(--red)}
+@media (max-width:700px){.cgrid{grid-template-columns:1fr}.cgrid div+div{border-left:0;border-top:1px solid var(--hair)}}
+
+footer{border-top:3px double var(--ink);padding-block:16px 26px}
+footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--f-type);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2)}
+footer a{text-decoration:none}
+footer a:hover{color:var(--red)}
+
+/* ---- page turn ---- */
+.leaf{position:fixed;left:0;right:0;bottom:0;z-index:20;overflow:hidden;background:var(--paper) var(--noise);transform-origin:left center;
+  animation:turn .85s cubic-bezier(.55,.06,.32,1) forwards;pointer-events:none;will-change:transform;backface-visibility:hidden}
+.leaf .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(40,25,5,0) 40%,rgba(40,25,5,.28));animation:shade .85s ease forwards}
+.leaf::after{content:"";position:absolute;top:0;bottom:0;right:0;width:40px;background:linear-gradient(90deg,transparent,rgba(255,250,240,.6))}
+@keyframes turn{0%{transform:perspective(2200px) rotateY(0)}100%{transform:perspective(2200px) rotateY(-112deg)}}
+@keyframes shade{from{opacity:0}to{opacity:1}}
+.under{animation:under .85s ease both}
+@keyframes under{from{filter:brightness(.88)}to{filter:none}}
+.first{animation:settle .7s ease both}
+@keyframes settle{from{opacity:.001;transform:translateY(10px) rotate(-.3deg)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}.leaf{display:none}}
+</style>
+
+<header class="mast wrap">
+  <h1><a href="#work">Joshua Nwabogor</a></h1>
+  <p class="motto">Product design and engineering, from first interview to shipped interface</p>
+</header>
+<nav class="navbar" aria-label="Main"><div class="wrap">
+  <span class="date"><a class="mini" href="#work">Joshua Nwabogor</a><span id="today"></span></span>
+  <span class="links">
+    <a href="#work" data-nav="work">Front page</a>
+    <a href="#process" data-nav="process">Process</a>
+    <a href="#about" data-nav="about">Profile</a>
+  </span>
+  <a href="#contact" data-nav="contact" class="cta">Let's talk <span aria-hidden="true">→</span></a>
+</div></nav>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="fiber" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<main id="app" class="wrap"></main>
+
+<footer><div class="wrap">
+  <span>Printed in Canada · © 2026 Joshua Nwabogor</span>
+  <span><a href="https://www.linkedin.com/in/joshuanwabogor/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://www.behance.net/joshbogs/" target="_blank" rel="noopener">Behance</a> · <a href="https://twitter.com/josh_bogs" target="_blank" rel="noopener">X</a> · <a href="https://www.instagram.com/josh.bogs/" target="_blank" rel="noopener">Instagram</a></span>
+</div></footer>
+
+<script>
+const EMAIL = "joshuanwabogor@gmail.com";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+
+/* ---------- Case studies ---------- */
+const PROJECTS = [
+  { id:"cro", headline:"UX Academy page sends application visits up 205%", title:"Designlab UX Academy: conversion rate optimisation", short:"Designlab CRO",
+    year:"2022", client:"Designlab", role:"Growth designer", industry:"Edtech",
+    tags:["A/B testing","CRO","Landing page"], cover:"AB.webp",
+    summary:"Restructuring the UX Academy page. In A/B testing, visits to the application page rose 205% and enrolment starts rose 47%.",
+    lede:"The UX Academy landing page on designlab.com is a key touchpoint in enrolment. Prospective students enter admissions from it in three ways: downloading the syllabus, booking a call, or joining a webinar. My job was to make the page explain the programme clearly and convert better.",
+    meta:[["Product owner","Danielle Abt"],["Design","Stephanie Poce, Joshua Nwabogor"],["Copy","Maria Myre"],["Tools","VWO, Crazy Egg, Figma, sticky notes"]],
+    sections:[
+      {h:"Method", pills:["Q/A priority tree","Workshop facilitation","Data gathering","Customer journey map","Experience mapping","Page information hierarchy","Paper prototyping","Wireframes","Hi-fi prototype","A/B testing"]},
+      {h:"Business goal", p:["Grow the number of qualified leads at the top of the funnel and convert them into bootcamp enrolments. Specifically:"],
+        list:["Get people with no design experience to enrol in UX Academy Foundations, then continue into UX Academy","Get people with design experience to apply to UX Academy","Get people into the admissions flow by leaving an email, so we can segment and qualify them"],
+        html:`<div class="stats"><div><b>60%</b><span>of entry clicks: download syllabus</span></div><div><b>20%</b><span>book a call with admissions</span></div><div><b>20%</b><span>sign up for an open-house webinar</span></div></div>`,
+        figs:[["goal.webp","Business goal"]]},
+      {h:"Audience", html:`<div class="aud"><div><span class="mono">Primary</span><h4>No design experience</h4><p>Career switchers (teachers, nurses, marketers, architects) and recent graduates with a passion for creativity who want a career in UX/UI.</p></div><div><span class="mono">Primary</span><h4>Some design experience</h4><p>Career switchers and graduates from graphic, web or digital design with a portfolio, looking to upskill and change design paths.</p></div><div><span class="mono">Secondary</span><h4>Researchers</h4><p>Mentors, partners and investors who want to understand Designlab's programmes.</p></div></div>`},
+      {h:"Where the page stood", p:["The page had been upgraded for the launch of UX Academy v3, which we used as a chance to raise the design and guide visitors towards opting in and applying. Time and design resources meant not every section was included."],
+        figs:[["Screenshot-2024-10-27-at-1.22.00-am.webp","The previous UX Academy page"]]},
+      {h:"Gaps in the experience", list:[
+        "It wasn't clear that people without design experience must take UX Academy Foundations first.",
+        "Visitors were asked to segment themselves by experience, but many missed it. They had to give an email before being routed to the Foundations flow.",
+        "Ninety percent of Academy students come through Foundations. UX Academy is mainly a career-switcher programme, so the page has to show the second step and the job outcome.",
+        "The four portfolio pieces students finish with are a competitive advantage, and the page undersold them.",
+        "Admissions spent over half their time answering the same questions: who Foundations is for and why it's required, what changes when moving to UX Academy, and the course format (online, mostly asynchronous, mentor-led, project-based).",
+        "Site visitors were 52% female and 48% male, but students were 72% female, 26% male and 2% non-binary. The page wasn't converting men."]},
+      {h:"Data", p:["Google Analytics, previous 90 days:"],
+        html:`<div class="stats"><div><b>50,097</b><span>page views</span></div><div><b>41,361</b><span>unique page views</span></div><div><b>64.37%</b><span>bounce rate</span></div><div><b>2:39</b><span>average time on page</span></div></div>`,
+        figsTwo:true, figs:[["eee.webp","Analytics"],["e.webp","Traffic sources"]]},
+      {h:"Measuring success", list:[
+        "Keep lead-generation conversion steady, with no drop-off",
+        "Raise page engagement, returning visits and click-through on the main calls to action",
+        "Define a goal path for the page: syllabus, then call, then enrol or apply",
+        "Lift Foundations enrolment from non-design leads from about 5% to 7%",
+        "Lift enrolment completion from the /enroll/ page from 8.5% to 10.5%",
+        "Lift UX Academy applications from 1.5% to 2.5%",
+        "Lift bootcamp lead conversion from about 10.3% to 12%"],
+        html:`<p class="small">Baseline, August–September 2022: 18,866 page visits, 1,157 syllabus downloads, 425 calls booked, 364 webinar sign-ups.</p>`},
+      {h:"Discovery", p:[
+        "I mapped the customer journey to test our early hypotheses and find where people hit friction or dropped off.",
+        "The journey had too many pop-ups interrupting it and leaned so hard on conversion that it got in the way. Content repeated across pages, calls to action had no clear priority, and the business wanted more information on the page than visitors could take in. The fix was to balance what we say with a cleaner, user-centred path."],
+        figs:[["Screenshot-2024-10-27-at-10.23.43-pm-scaled.webp","Customer journey analysis"]]},
+      {h:"Prioritisation workshop", p:["I ran an asynchronous workshop with a Q/A prioritisation tree. Stakeholders added questions and suggestions remotely, then we grouped and ranked them so the work focused on the highest-impact issues first."],
+        figs:[["pt-scaled.webp","Q/A prioritisation tree"]]},
+      {h:"Wireframes", p:[
+        "I started with hand sketches to explore layouts and decide what each section should prioritise before going digital, then moved to mid-fidelity.",
+        "Over about eight versions, feedback shaped the layout: clearer calls to action, less repetition and a more direct flow. The final version went to stakeholders in a separate review file with the full task flow, a section for their feedback kept apart from internal design notes, and a visual map linking each part of the page to the rest of the site."],
+        figs:[["wireframe-Sketch-scaled-e1730113305515.webp","First draft: hand sketch","tall"],["Screenshot-2024-10-28-at-10.55.07-am.webp","Second draft: mid-fidelity"]]},
+      {h:"Copywriting", p:["Discovery showed the copy needed work, so I partnered closely with copywriter Maria Myre. I set up a space in Figma we called the Copy Writing Kingdom to hold each version of the copy, so the words and the design could adapt to each other as both changed."],
+        figs:[["copywriting-scaled.webp","The Copy Writing Kingdom in Figma"]]},
+      {h:"High-fidelity design", p:[
+        "The first draft addressed every concern raised and simplified the page. To lead a shift in the company's visual identity, we pushed a second version with a bolder brand direction.",
+        "The final design folded in all remaining feedback, simplified further and matched Designlab's new style."]},
+      {h:"A/B test setup", p:["We tested in VWO. First we set a baseline on the existing design, then split traffic between the control (the old page) and Variation 1 (the new design), tracking 16 goals across clicks, page visits, applications, enrolments and leads."],
+        pills:["Apply clicks","Get syllabus clicks","Book a call clicks","Join webinar clicks","Enrol in Foundations clicks","UXA application page visits","Enrolment step 1 visits","Foundations page visits","UXA applications","Payment form visits","Enrolments","Leads: any","Leads: syllabus","Leads: webinar","Leads: booked call","Modal closes"]},
+      {h:"Results", html:`<div id="results"></div><p class="small">Conversion rate per goal, control vs Variation 1, across 40,585 visitors. For the Apply and Get Syllabus clicks, the control recorded no conversions, so no lift is shown.</p>`,
+        figsTwo:true, figs:[
+          ["Screenshot-2024-10-28-at-5.29.03-pm-e1730137092414.webp","G2: Apply button clicks"],["Screenshot-2024-10-28-at-5.36.20-pm.webp","G3: Get syllabus clicks"],
+          ["Screenshot-2024-10-28-at-5.43.20-pm.webp","G7: UXA application page visits"],["Screenshot-2024-10-28-at-5.49.56-pm.webp","G8: Enrolment step 1 visits"],
+          ["Screenshot-2024-10-28-at-5.51.46-pm.webp","G9: Foundations page visits"],["Screenshot-2024-10-28-at-8.29.14-pm.webp","G10: UXA applications"],
+          ["Screenshot-2024-10-28-at-8.39.02-pm.webp","G12: Payment form visits"],["Screenshot-2024-10-28-at-8.45.19-pm.webp","G14: Booked admissions calls"]]},
+      {h:"What it showed", p:["Variation 1 beat the control on every goal we tracked. The biggest gains were in visits to the UX Academy application and Foundations pages, booked admissions calls and submitted applications."],
+        list:["Engagement: clearer calls to action and a simpler journey lifted Apply, Get Syllabus and Book a Call.","Funnel: more people reached the enrolment and payment steps.","Friction: a tighter page flow, especially on landing and application pages, raised overall conversion."],
+        figs:[["Screenshot-2024-10-28-at-9.06.39-pm.webp","Summary of results"]]},
+      {h:"Handoff", p:["The spec is built on an 8-point grid so spacing and alignment stay consistent from Figma to code. It documents spacing, alignment and component structure for developers."],
+        figsTwo:true, figs:[["Screenshot-2024-10-28-at-1.57.05-pm.webp","Spec: 8-point grid"],["Screenshot-2024-10-28-at-1.57.17-pm.webp","Spec"],["Screenshot-2024-10-28-at-1.57.43-pm.webp","Spec"],["Screenshot-2024-10-28-at-1.58.15-pm.webp","Spec"]]},
+      {h:"Colour, buttons, type", p:[
+        "The palette follows the new brand: vibrant accents against neutrals, each colour with a defined job in guiding attention.",
+        "Buttons sit on the same 8-point grid, with filled, outlined and text styles marking hierarchy and tap areas sized for accessibility. Type pairs a modern sans-serif for headings with a readable body face."],
+        figs:[["Colors-Designlab-scaled.webp","Colour"],["Screenshot-2024-10-28-at-2.08.31-pm.webp","Buttons"],["Screenshot-2024-10-28-at-2.10.45-pm.webp","Typography"]]}
+    ]},
+
+  { id:"rebrand", headline:"Ten years on, a design school gets a new face", title:"Designlab rebrand", short:"Designlab rebrand",
+    year:"2022", client:"Designlab", role:"Growth designer", industry:"Edtech",
+    tags:["Rebrand","Design system","Web"], cover:"rebrand.webp",
+    summary:"Taking a ten-year-old design school brand into a new identity across the website and course pages.",
+    lede:"Designlab was founded in 2013 and its original logo and fonts had stayed in place ever since. The rebrand was months of deliberate work to give the company an identity that matched where it had grown. I led growth design on the website side.",
+    hero:"65b94511b01b4416a55fde53_Screenshot-2024-01-30-at-12.50.23-PM.webp",
+    meta:[["Team","Stephanie Poce (Head of Design), Joshua Nwabogor (Growth Design)"],["Copy","Maria Myre"]],
+    sections:[
+      {h:"What I owned", list:["Website and accessibility audits","User stories and sitemap","Course pages and landing page optimisation","Conversion rate optimisation","Design system and style guide","Navigation and information architecture","Page information hierarchy","Page specs and handoff documentation","Stakeholder management"]},
+      {h:"Stakeholders", p:["Worked with Rudi Goddard, Harish Venkatesan, Daniel Shapiro and Matt Shaw on the business side."]},
+      {h:"The new site", figsTwo:true, figs:[
+        ["Screen_one-2-9f58c5350ce10bebdb8d5d6990d86a29.webp",""],["Screen_one-3-2b3d8635b8779a289ca96eaf55c4a93f.webp",""],
+        ["Screen_one-4-2823c4cc6639c58dc7e60e2644423e9f.webp",""],["Screen_one-4fb9640cd468e459881fe848d4b78aea.webp",""],
+        ["Screen_one-5-56971746d214b4eca0954c4f390e87a4.webp",""],["Screen_one-8-f00efdd3662fc4ee1b8a1d0f4a4c354b.webp",""],
+        ["Screen_one-6-a3f4ddff014c0040674c64a73e54b896.webp",""],["Screen_one-9-d36fc91791c05d67c03217a491bc8253.webp",""]]},
+      {h:"Read more", html:`<p>Designlab published its own account of the rebrand: <a href="https://designlab.com/blog/behind-the-rebrand" target="_blank" rel="noopener">Behind the rebrand</a>.</p>`}
+    ]},
+
+  { id:"sameday", headline:"Same-day custom apparel lifts retention 12%", title:"SameDay Custom", short:"SameDay Custom",
+    year:"2021", client:"SameDay Custom", role:"Product designer", industry:"E-commerce",
+    tags:["PWA","E-commerce","Research"], cover:"609d0f13dd95ca56f4a7c47c_sameday.webp",
+    summary:"An Uber-style marketplace for custom apparel. Retention rose 12%, average order value 8% and cart abandonment fell 5%.",
+    lede:"SameDay Custom works the way ride-hailing does: it connects people with print shops near them, called partners, so custom apparel for personal use or campaigns arrives the same day. I designed the customer and partner modules.",
+    meta:[["Duration","6 months"],["Deliverables","Research, UX/UI, strategy, A/B tests, analytics"]],
+    sections:[
+      {h:"The problem", p:["Customers needed their items on time. Our surveys showed most of them wanted delivery the same day they ordered."], figs:[["60a1a24d28b1b0a9614eee7d_SameDay_goals.webp","Goals"]]},
+      {h:"Outcomes", html:`<div class="stats"><div><b>+12%</b><span>customer retention</span></div><div><b>+10%</b><span>organic traffic</span></div><div><b>+8%</b><span>average order value</span></div><div><b>−5%</b><span>cart abandonment</span></div></div>`, p:["Customers were happier and reviews improved."]},
+      {h:"Constraints", list:["Designing an effective design lab, where customers create their own products, was the hardest part.","I took a Google Analytics course to interpret our data properly, and learned Inspectlet to read heatmaps.","High traffic meant a lot of user data to work through."]},
+      {h:"The solution", p:["To deliver on time, we partnered with local print shops. Partners plug into the platform and serve customers in their area. We find each customer's location and show products from nearby partners; widening the mile radius shows more products, with longer shipping."],
+        html:`<div class="btns"><a class="btn ghost" href="https://www.samedaycustom.com/" target="_blank" rel="noopener">Customer site ↗</a><a class="btn ghost" href="https://partner.samedaycustom.com/" target="_blank" rel="noopener">Partner site ↗</a></div>`,
+        figs:[["samedaycustom-adult-female.webp","SameDay Custom"]]},
+      {h:"Key features", figs:[["60a1a24bbd4b012c9f366a21_detectlocation.webp","Location detection"],["60a1a24cdfec4630168d13ca_mile_radius_mobile.webp","Mile radius on mobile"],["60a1a24c2e11852b175e869e_Group_orders.webp","Group orders"]], figsTwo:true},
+      {h:"Research", p:["I went deep on users and their pain points, and looked for common ground between business and user goals."],
+        pills:["User surveys","Competitive analysis","Service design","Journeys and user flows","Secondary research","User analytics","Heatmaps","Market trends"]},
+      {h:"Competitive analysis", p:["I studied direct and indirect competitors across the market to find gaps SameDay Custom could own."], figs:[["60a1a24c0d8f054e7da50f13_competitive_analysis.webp","Competitive analysis"]]},
+      {h:"Survey", p:["A quick Google Forms survey covered demographics, frustrations with shopping online and preferred services."],
+        list:["Millennials do most of the online shopping","Shirts are bought most, then bags","Home delivery is preferred"],
+        figs:[["60a1a24d74b1ae47b989250d_Survey_answers.webp","Survey answers","tall"]]},
+      {h:"Interviews", p:["I wrote an interview guide to explore users' tasks, opinions and pain points with our primary customers. It's blurred because it's confidential."],
+        figsTwo:true, figs:[["60a1a24d2d64ff846168086b_research_plan.webp","Interview guide"],["60a1b2a787e7d37cd9de9189_sameday_persona-1.webp","Persona"]]},
+      {h:"Affinity map", p:["We grouped survey and interview findings to pull out themes:"],
+        list:["Online is cheaper, offers more payment methods and easy coupons","People want custom items delivered as fast as possible","Most customers shop on their phones","Reviews come first; people look them up before buying","Checkout gets too complicated for large orders","Families, friends and companies order for their own reasons","People love creating their own products, owning them, and selling their designs on the side"],
+        figs:[["60a1a24d56b1cd615364ca31_affinity.webp","Affinity map"]]},
+      {h:"Defining the structure", p:["A Figma scratchboard served as our mood board for competitors' flows and structure. A service blueprint mapped how people move across all our touchpoints, and Jira epics and roadmaps tracked the customer, partner and admin modules."],
+        figsTwo:true, figs:[["60a1a24c87e7d35332de437e_brainstorm.webp","Scratchboard"],["60a1a24d27f2144d786015f5_serviceblueprint-p-1600.webp","Service blueprint"],["60a1b56df7dddee79d12b9f9_roadmap-p-1600.webp","Roadmap"],["60a1b63c65b0035a469c5511_samedayia.webp","Information architecture"]]},
+      {h:"Flows", p:["We built the sitemap with card sorting and tree testing, then mapped the user journey and flows."], figs:[["60a1a24e94d3e68544b50b39_userflow-p-1600.webp","User flow"]]},
+      {h:"Design", p:["I sketched on paper first, then built a mid-fidelity prototype in Figma. With the structure settled, I made a style guide and mood board and moved to high fidelity."],
+        figs:[["60a1a24fc58d595c12c2916c_Midfi.webp","Mid-fidelity wireframes (scroll)","tall"],["60a1a24d74b1ae747489250c_designstytem-p-1600.webp","Design system"],["60a1a24fd9c5f479dfd809ed_Hi-fi-1.webp","High-fidelity design (scroll)","tall"]]},
+      {h:"Testing", p:["We A/B tested designs with Google Analytics and Inspectlet session recordings, working through a large number of sessions to find what to change."],
+        figsTwo:true, figs:[["60a1a24d94d3e67d24b50b38_inspect3-p-1600.webp","Session recordings, version 1"],["60a1a24d6df732d3ab11b66f_inspect2-p-1600.webp","Session recordings"],["60a1a24dfb490376eea4e08d_inspect1-p-1600.webp","Mobile session recordings"],["60a1a24c65b0037ec79bfde0_analytics1-p-1600.webp","Analytics"]]},
+      {h:"What I learned", p:["The best way to build products that work is to listen to users and use the right analysis tools. Working with a diverse team taught me a lot about collaboration, and I learned a lot about SEO.","On a platform this large, set up the design system before you build. The site is live, and like any product, it's never finished."]}
+    ]},
+
+  { id:"uba", headline:"Bank app rebuilt for 18 million customers in one week", title:"UBA mobile banking app", short:"UBA Mobile",
+    year:"2019", client:"United Bank for Africa", role:"Product designer", industry:"Banking",
+    tags:["Fintech","Mobile app","Research"], cover:"uba.webp",
+    summary:"Redesigning the app for 18 million customers in one week, separating everyday banking from lifestyle features.",
+    lede:"UBA's mobile app handles day-to-day banking on the go: loan applications, withdrawals, airtime and utility bills. The brief was to rebuild a unified visual system around its two cores, banking and lifestyle, with launch one week away.",
+    hero:"uba-mobile-app.webp",
+    meta:[["Team","Segun Daniel Ogundipe, Adanne Ginikachukwu, Linda, Sampson Aneke, Team Vericash"],["Tools","Paper, sticky notes, Excel, Lucidchart, Adobe XD"]],
+    sections:[
+      {h:"Method", pills:["User interviews","Stakeholder meetings","Card sorting","Site mapping","User flows","Experience mapping","Paper prototyping","Wireframes","Hi-fi prototype"]},
+      {h:"Audience", p:["Almost every demographic used the app, but the lifestyle features UBA wanted pointed at one group. I defined the primary audience as millennials through Gen Z."], figs:[["Target-Audience.webp","Primary target audience"]]},
+      {h:"The problem", p:[
+        "UBA is one of Africa's most profitable banks, yet its app wasn't landing with customers. The existing design hadn't followed a clear process, which left visual and usability errors throughout.",
+        "Feedback from users and internal stakeholders alike was negative."], figs:[["uba-banks-old.webp","The existing app"]]},
+      {h:"Discovery", p:["I started with discovery sessions with stakeholders and product owners to see the project through their eyes. The goals:"],
+        list:["Merge business goals with user satisfaction","Pin down brand attributes and challenges","Understand users' journeys and pain points","Develop and validate hypotheses through open and closed group surveys"],
+        figs:[["discover.webp","Discovery session"],["company-profiling-1024x629.webp","Company profiling"]]},
+      {h:"What product owners told me", list:["Stakeholders understood the technology and wanted innovation","The interface needed a complete change","Launch was one week away","Any fix had to serve 18 million customers"]},
+      {h:"Competitive analysis", p:["I compared newer banks that had built savings, loans and lifestyle into their products, mapped their features against UBA's user stories, and looked for openings in navigation and onboarding."],
+        figs:[["possible-competition.webp","Like-minded competitors"],["Screenshot-2021-01-24-at-13.43.25-1024x521.webp","Feature comparison"]]},
+      {h:"Validating the idea", p:["The problems a business names are not always the real problem, so I validated before designing. A closed-group qualitative survey produced hypotheses in four groups; a prioritisation canvas picked which to test; an open-group quantitative survey tested them."],
+        figsTwo:true, figs:[["survey-approach.webp","Survey approach"],["Quan-1024x520.webp","Closed-group survey"],["hypothesis-prioritization-canvas-1024x541.webp","Hypothesis prioritisation canvas"],["Hypothesis-result-1024x574.webp","Open-group results"]]},
+      {h:"What we learned", list:["Findability of the lifestyle features was low","Navigation and the sitemap needed to change so people could discover features","The home screen and landing areas needed rework","With one week, the highest-impact deliverables were a style guide, sitemap and process flow"],
+        figs:[["analysis-result.webp","Survey analysis"]]},
+      {h:"Persona and problem", figs:[["userpersona-1024x568.webp","User persona"]],
+        html:`<div class="callout"><b>Problem statement</b><p>"Generation UBA" wants to manage their money from their phone: request loans, withdraw and save on the go, and express their lifestyle.</p></div><div class="callout"><b>Design solution</b><p>Redesign the sitemap and separate lifestyle from banking to increase findability.</p></div>`},
+      {h:"Information architecture", p:["I card-sorted every primary feature by how often users would reach for it, using the quantitative survey as the guide, and built the new sitemap from the resulting categories."],
+        figs:[["card-sorting-1024x683.webp","Card sorting"],["sitemap-1024x697.webp","New sitemap"]]},
+      {h:"Journey mapping", p:["I mapped the existing journey for applying for a loan. Users' emotions declined across the whole flow; engagement was close to zero. The new map targets navigation and the findability of lifestyle features."],
+        figs:[["customer-Journey-Map-1024x341.webp","Existing customer experience"],["new-map-1024x409.webp","Redefined experience map"]]},
+      {h:"Flows and wireframes", p:["User flows set which screens were needed and in what order. Wireframes locked the structure before visual design, which kept iteration low on a one-week timeline."],
+        figs:[["userflow-together.webp","User flows"],["wireframe-roughs-1-1024x452.webp","Wireframes"]]},
+      {h:"Visual design", figs:[["combo-prototype-mix-1024x641.webp","Visual design and live prototype"],["findability.webp","How the new structure solves findability"],["other-pages-1024x450.webp","Before and after"],["other-2-1024x597.webp","Before and after"]]},
+      {h:"Feedback", figs:[["feedback.webp","User feedback"]]}
+    ]},
+
+  { id:"oasis", headline:"One platform to run a capital market end to end", title:"Project Oasis", short:"Project Oasis",
+    year:"2019", client:"Africa Prudential Plc", role:"Lead product designer", industry:"Capital markets",
+    tags:["Fintech","SaaS","Enterprise"], cover:"oh__img25-1024x573-copy.webp",
+    summary:"An enterprise platform that automates every party in capital-market transactions, from e-IPO to AGM accreditation.",
+    lede:"Oasis is a one-stop capital-market platform that automates, end to end, the key parties in every class of transaction: e-IPO, primary listing, secondary trading, mutual funds, AGM accreditation and management. I led design.",
+    hero:"Changeable-Color.webp",
+    meta:[["Team","Adebowale Adewale, Amadi Chijindu, Faniyi Lanre (design), Patrick Anyawa (business analyst)"],["Tools","Balsamiq, Lucidchart, Adobe XD, VS Code, paper"]],
+    sections:[
+      {h:"Method", pills:["User interviews","Contextual inquiry","Card sorting","Site mapping","Affinity mapping","User flows","Experience mapping","Paper prototyping","Wireframes","Hi-fi prototype"],
+        html:`<div class="btns"><a class="btn ghost" href="https://xd.adobe.com/view/e59559a4-1e3e-40f7-ac8c-b58af7190c8d-b0c6/?fullscreen" target="_blank" rel="noopener">View prototype ↗</a><a class="btn ghost" href="https://oasis-investor-staging.netlify.app" target="_blank" rel="noopener">Staging build ↗</a></div>`},
+      {h:"The problem", list:[
+        "Manual processes: digital tools between market operators and customers covered only about 10% of capital-market activity.",
+        "Silos: every operator worked separately, making investor requests, trades and settlement slow and inefficient.",
+        "No universal KYC: shareholder records didn't line up with NIBSS and SEC requirements, leaving huge unclaimed dividends and problems with name changes and children's stocks.",
+        "The existing design focused on function, wasn't appealing and didn't meet stakeholders' requirements."],
+        figs:[["old-oasis.webp","The existing design"]]},
+      {h:"Discovery", p:["I ran virtual discovery sessions with stakeholders and product owners to see the project through their eyes. The goals:"],
+        list:["Define business goals and challenges","Understand the capital-market process","Choose the target market","Understand users' journeys and pain points","Validate ideas through open and closed group surveys","Define brand attributes, merging business goals with user satisfaction"],
+        figs:[["virtual-Discovery-for-oasis.webp","Virtual discovery session"]]},
+      {h:"What I found", list:["Stakeholders had little background in technology and innovation","Earlier timeline expectations were unrealistic, and I had to reset them","User needs had been proposed without validation","There was no defined approach and no problem statement"], figs:[["Sticky-Notes.webp","Business goals and problems"]]},
+      {h:"Audience and value", html:`<div class="callout"><b>Primary: investors</b><p>The smartest way to invest and manage a capital-market portfolio: one experience across devices for dematerialisation, letter requests, e-dividends, signature mandates and CSCS transfers, with support, market education, payments, trading and settlement.</p></div><div class="callout"><b>Secondary: market operators</b><p>Customisable, turnkey plug-ins over API that cover each operator's value-added services and modernise their operations.</p></div>`,
+        figsTwo:true, figs:[["test.webp","Primary audience and value proposition"],["breakkkkk.webp","Investor audience breakdown"]]},
+      {h:"Competitors", p:["I compared modern investment platforms that had built investing and borderless stock-buying into their models, split into investment apps and capital-market apps, and noted their strengths."],
+        figs:[["capital-markt.webp","Capital-market applications"],["competitors-strong-point.webp","Competitive advantage"],["Layengvr-1.webp","Market opportunity"]]},
+      {h:"Validating the idea", p:["Stakeholders' framing isn't always the real problem, so I validated first. A closed-group qualitative survey produced hypotheses in four groups, a prioritisation canvas chose which to test, and an open-group quantitative survey tested them."],
+        figsTwo:true, figs:[["validation-approach.webp","Validation approach"],["hypothesis-developed.webp","Hypotheses"],["Canvas.webp","Prioritisation canvas"],["Hypothesis-to-test-for.webp","Quantitative survey"]]},
+      {h:"What we learned", list:["Investors aged 19–45 were less interested in capital markets than older, better-informed investors","They knew little about the market or its regulation","Making products more accessible and part of their lifestyle would raise adoption over time","Younger investors wanted short-term gains; older ones were patient for the long term","Oasis would work if people understood it as a universal, up-to-date KYC system"],
+        html:`<div class="callout"><b>Recommendation</b><p>Add a separate community section for younger investors to learn and talk about the market, and build Oasis in phases for investors, stockbrokers, registrars and admins.</p></div>`,
+        figs:[["analysis.webp","Survey analysis"]]},
+      {h:"Personas and trends", figs:[["Persona-1.webp","Persona from the mood board"]],
+        html:`<div class="aud" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div><span class="mono">Wants</span><p>A real-life sense of how the product works; one place to learn and talk about the market; automation of broker, registrar and investor processes.</p></div><div><span class="mono">Frustrations</span><p>No sync between operators; no unified KYC; manual e-dividend claims and paper dematerialisation; multiple ID numbers with no uniformity.</p></div></div>`},
+      {h:"Design studio", p:["A group design studio defined the features and the home and item pages. Time was tight, so we went from sitemap to wireframes, style guide and components, then testing with heatmaps and feedback."],
+        figs:[["desk.webp","Problem statements"],["team.webp","Team design studio"]], figsTwo:true},
+      {h:"Information architecture", p:["To build the sitemap and global navigation, we first identified every capital-market operator and mapped their internal processes. Ideation led to functional and business requirements, which came to me as user stories, giving product owners and developers a shared structure to agree on."],
+        figs:[["Operators-of-the-capital-Market.webp","Capital-market operators"],["primary-focus.webp","Primary focus"],["userstories.webp","User stories"]]},
+      {h:"Sitemap and flows", p:["The sitemap shows where everything lives across the platform. Process flows covered the investor centre and KYC."],
+        figsTwo:true, figs:[["site-map.webp","Sitemap"],["investor-center-flow.webp","Investor centre flow"],["kyc-flow.webp","KYC flow"],["PROCESS-FLOW.webp","Internal process flow"]]},
+      {h:"Wireframes to visual design", p:["Wireframes set the structure before mockups, which cut iteration later."],
+        figs:[["wireframe.webp","Wireframes"],["oasiss.webp","Visual design"],["community.webp","Community section"],["some-more-design.webp","More screens"],["more-pagees.webp","More screens"]]},
+      {h:"Style guide", p:["The style guide kept the platform consistent, let designers and developers reuse components, and made collaboration easier."], figs:[["stylegudie.webp","Style guide"],["oasis-today.webp","Oasis prototype"]]}
+    ]},
+
+  { id:"easycoop", headline:"Police cooperative trades paper files for a platform", title:"Easycoop cooperative manager", short:"Easycoop",
+    year:"2018", client:"Nigeria Police", role:"Lead product designer", industry:"Fintech",
+    tags:["Fintech","SaaS","Web app"], cover:"my-easycoop.webp",
+    summary:"Taking the Nigeria Police cooperative from paper files to a platform, with over 200,000 officers trained on it.",
+    lede:"Easycoop automates the running of a cooperative society: loan applications, withdrawals, deposits, dividends and administration. The brief was to automate the entire cooperative system for the Nigeria Police.",
+    hero:"easycoop-in-a-tab.webp",
+    meta:[["Team","Faniyi Lanre, Adebowale Adewale (design), Emerald Kwekowe, Rueben Obuzokhai (frontend), Akinwale Agbaje, Emmanuel Idoko (backend), Ahmed Oladapo (data)"],["Tools","Balsamiq, Lucidchart, Adobe XD, Inspectlet, paper"]],
+    sections:[
+      {h:"Method", pills:["User interviews","Contextual inquiry","Card sorting","Site mapping","Affinity mapping","User flows","Experience mapping","Heatmaps","Paper prototyping","Wireframes","Hi-fi prototype"], html:`<div class="btns"><a class="btn ghost" href="https://myeasycoop.com/" target="_blank" rel="noopener">Live site ↗</a></div>`},
+      {h:"The problem", p:["Loans, withdrawals and deposits ran on a slow manual process."],
+        list:[
+          "Data: officers' records sat in old paper files, unreliable and hard to reach. Loans often became bad debt because repayments couldn't be tracked.",
+          "The first design attempt hadn't followed a design process, wasn't appealing and created more problems than it solved.",
+          "Gender: male officers took part far more than female officers, which shaped research participation and even the photos on the landing page.",
+          "Language and ethnicity: Nigeria has over 250 ethnic groups and 500 languages. With the loan office in the city, officers from outside the dominant groups struggled to get loans.",
+          "Distance: with one cooperative office in the country, officers travelled to Lagos for something as simple as a withdrawal."],
+        figsTwo:true, figs:[["old-files.webp","Paper records"],["oldexistinf.webp","The existing design"]]},
+      {h:"Discovery", p:["I ran discovery sessions with stakeholders and product owners. What I found:"],
+        list:["Stakeholders had little background in technology","Earlier timeline expectations were unrealistic, and I reset them","User needs had been proposed without validation","There was no defined approach and no problem statement"],
+        figs:[["discover-session.webp","Discovery session"]]},
+      {h:"Validating the idea", p:["A closed-group qualitative survey produced hypotheses in four groups; a prioritisation canvas chose which to test. For the quantitative survey we weighed online forms against paper interviews, then ran it and analysed the results."],
+        figsTwo:true, figs:[["Idea.webp","Validation approach"],["13e.webp","Hypotheses"],["hypothesis.webp","Prioritisation canvas"],["coducting-to-test-for.webp","How the survey was run"]]},
+      {h:"Hypotheses", list:["Engagement and trust will grow if officers can see their full contribution history","Onboarding will be smoother with a phone number or police ID instead of email","Quick loans with a quick-save feature will build saving and reduce ethnic barriers","Automated disbursement will make withdrawals work"], figs:[["survey-Result.webp","Survey results"]]},
+      {h:"Competitors", p:["I compared platforms that had built saving, lending and cooperative management into their products, mapped their features against our user stories, and looked for openings in navigation and onboarding."], figs:[["Competitor-Analysisi.webp","Competitor analysis"]]},
+      {h:"Personas and trends", figsTwo:true, figs:[["User-Persona.webp","User persona"],["Srum.webp","Other trends"]],
+        html:`<div class="aud" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div><span class="mono">Wants</span><p>A real sense of how it works; one point of contact; reminders on loans, withdrawals and rates; training; on-site internet-connected desktops.</p></div><div><span class="mono">Frustrations</span><p>No contact centre; unreliable hand-written loan history; religious segregation; long queues; little expert help.</p></div></div>`},
+      {h:"In the field", p:["Visiting the Police cooperative showed me that a simple, working product mattered more than a fancy one. Talking to staff let me split features into primary and secondary by what users needed, not just what the business listed."],
+        list:["Phone number matters more than email","Police ID isn't unique, so it can't identify people","Savings are both compulsory and voluntary","Loan types vary by rank","Withdrawals need approval"],
+        figs:[["Police.webp","Contextual inquiry"]]},
+      {h:"Information architecture", p:["Four users open-sorted the brief's features into their own categories; I affinity-mapped those into the main sitemap groups. Two more users then sorted features into my categories, and they matched."],
+        html:`<div class="btns"><a class="btn ghost" href="https://drive.google.com/file/d/1Cg8_OwEgyx49p-WYEKCNe85I0U1sa9uM/view?usp=sharing" target="_blank" rel="noopener">Full sitemap ↗</a></div>`,
+        figs:[["Card-sortinga.webp","Card sorting"],["sitemap-easycoop.webp","Sitemap"]]},
+      {h:"Heatmaps", p:["I ran the old design through Inspectlet. On the homepage, people lingered in the login modal and the page gave no information; one user said it looked like a family reunion site. On the dashboard, every button had similar heat, so people didn't know where to go."],
+        figs:[["heATMAPS-CLICK1.webp","Homepage heatmap"],["dashboardss1.webp","Dashboard heatmap"]]},
+      {h:"Journey mapping", p:["I mapped applying for a loan on the old design, then the redesigned journey. Three users ordered post-it features for the loan checkout, which added guarantor verification and a loan schedule screen."],
+        figs:[["cem.webp","Existing experience map"],["ENCEm.webp","New experience map"]]},
+      {h:"Flows and wireframes", p:["User flows covered the three core tasks: withdrawals, savings and loan applications. Paper wireframes fixed the structure before visual design."],
+        figs:[["userflow.webp","User flows"],["wireframe-picture.webp","Wireframes"],["wireframe-more.webp","More wireframes"]]},
+      {h:"Visual design", figs:[["easycooplandloa.webp","Visual design"],["homepage-new.webp","Homepage, before and after"],["dashboad-new.webp","Dashboard, before and after"],["someotherpages.webp","Other pages, before and after"]]},
+      {h:"Easycoop today", p:["The work continued after launch:"], list:["Visual design for the remaining screens, tested with users","A responsive version, as most traffic moved to mobile","A mobile app","Training for over 200,000 police officers on the platform"], figs:[["policee.webp","Easycoop today"]]}
+    ]}
+];
+
+const TESTIMONIALS = [
+  {h:"A strong collaborator and advocate for the user, especially on accessibility", by:"Michael Gunn", role:"Head of Design", photo:"1516277897749.webp",
+   t:"I've thoroughly enjoyed working with Josh over the past several months. His positive attitude makes him a great addition to any team. He is a strong collaborator and advocate for the user (especially when it comes to accessibility). I highly recommend Josh Nwabogor if you are looking for a great Product Designer who will deliver results in a human centered manner."},
+  {h:"An excellent design approach", by:"David Lansing", role:"Senior Product Manager", photo:"1654721158483.webp",
+   t:"Josh and I have collaborated on dozens of new experiences for consumers interested in purchasing Medicare. His approach always put the customer first and made our products more accessible for the target audience, while still producing a beautiful and delightful experience. He often provided iterations well ahead of schedule, and several of the prototypes he created were shown to executive leadership and helped move the company forward with our evolving strategy."},
+  {h:"He is unique", by:"Adewale Adebowale", role:"Senior Product Designer", photo:"1632262191773.webp",
+   t:"Joshua's design ability is something that's very rare. We've worked collaboratively on quite a number of projects and his problem-solving skills are very impressive. I'd highly recommend his expertise to any organization."}
+];
+
+
+const RESULTS = [
+  ["Apply button clicks",0,7.93],["Get syllabus clicks",0,5.46],
+  ["UXA application page visits",1.88,5.74],["Enrolment step 1 visits",8.47,12.41],
+  ["Foundations page visits",8.61,15.08],["UXA applications",0.69,1.04],
+  ["Payment form visits",2.86,3.99],["Booked admissions calls",1.62,2.41]];
+
+
+/* ---------- Paper helpers ---------- */
+function hash(s){let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))|0;return Math.abs(h);}
+function tilt(s,max){return (((hash(s)%200)/100)-1)*max;}
+function frame(file, alt){
+  return `<div class="frame"><img src="img/${esc(file)}" alt="${esc(alt||"")}" loading="lazy" onerror="this.parentNode.classList.add('missing')"></div>`;
+}
+function patch(file, cap, opt={}){
+  const t = opt.tilt!=null ? opt.tilt : tilt(file, opt.max ?? .7);
+  const tape = opt.tape || (hash(file)%3===0 ? "t2" : "t1");
+  const num = opt.num ? `<b>Fig. ${opt.num}</b>` : "";
+  const fc = (cap||num) ? `<figcaption>${num}<span>${esc(cap||"")}</span></figcaption>` : "";
+  return `<figure class="patch ${tape} ${opt.cls||""}" style="--tilt:${t.toFixed(2)}deg">${frame(file, cap)}${fc}</figure>`;
+}
+function rng(seed){let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};}
+function jag(seed, inset, amp, step){
+  const r=rng(seed), pts=[];
+  const ph=[r()*6.28,r()*6.28,r()*6.28,r()*6.28], fr=[1.5+r()*2,4+r()*3];
+  const off=(side,t)=>{const w=Math.sin(t/100*6.28*fr[0]+ph[side])*.5+.5, w2=Math.sin(t/100*6.28*fr[1]+ph[(side+1)%4])*.5+.5;
+    return inset + amp*(0.55*w + 0.25*w2 + 0.2*r());};
+  const c=inset+amp*.6, cl=v=>Math.min(100-c,Math.max(c,v));
+  for(let x=0;x<100;x+=step) pts.push(`${cl(x).toFixed(1)}% ${off(0,x).toFixed(2)}%`);
+  for(let y=0;y<100;y+=step) pts.push(`${(100-off(1,y)).toFixed(2)}% ${cl(y).toFixed(1)}%`);
+  for(let x=100;x>0;x-=step) pts.push(`${cl(x).toFixed(1)}% ${(100-off(2,x)).toFixed(2)}%`);
+  for(let y=100;y>0;y-=step) pts.push(`${off(3,y).toFixed(2)}% ${cl(y).toFixed(1)}%`);
+  return `polygon(${pts.join(",")})`;
+}
+function cutting(file, alt, sq){
+  const h=hash(file), k=sq?2.4:1;
+  const outer=jag(h,0,1.6*k,.7*k), inner=jag(h+11,1.6*k,3.2*k,.9*k), inner2=jag(h+11,1.1*k,3.2*k,.9*k);
+  const t=tilt(file, sq?3:1.2);
+  return `<figure class="tear" style="--tilt:${t.toFixed(2)}deg;--outer:${outer};--inner:${inner};--inner2:${inner2}">
+    <div class="paper"><i></i><b></b></div>
+    <div class="frame${sq?" sq":""}"><img src="img/${esc(file)}" alt="${esc(alt||"")}" loading="lazy" onerror="this.parentNode.classList.add('missing')"></div>
+  </figure>`;
+}
+
+/* ---------- Views ---------- */
+const meta = p => [p.client, p.industry, p.year].filter(Boolean).map(esc).join(" · ");
+
+function viewWork(){
+  const [lead, ...rest] = PROJECTS;
+  const faac=[["F","Functional","it solves the actual problem, checked with users before it's polished"],["A","Aesthetically pleasing","it appeals to the people it's for, not the design team"],["A","Accessible","it works for everyone, including people the brief forgot"],["C","Converts","it moves the number the business cares about"]];
+  const run=`<span class="tk-lead">A good design must be</span>`+faac.map(f=>`<span class="tk-item"><b>${f[0]}</b><strong>${f[1]}</strong> — ${esc(f[2])}</span>`).join("");
+  return `
+  <div class="ticker" aria-label="A good design must be: functional, aesthetically pleasing, accessible, and it converts">
+    <span class="tk-tag">Editorial</span>
+    <div class="tk-window" aria-hidden="true"><div class="tk-track"><div class="tk-run">${run}</div><div class="tk-run">${run}</div></div></div>
+  </div>
+  <section class="front">
+    <div class="lead">
+      <a class="story" href="#${lead.id}">
+        <span class="kicker">Lead story · ${esc(lead.industry)}</span>
+        <h2>${esc(lead.headline)}</h2>
+        <p class="deck">${esc(lead.summary)}</p>
+        <div class="byline">By Joshua Nwabogor · ${esc(lead.role)} · ${esc(lead.client)}, ${esc(lead.year)}</div>
+        <div class="lead-body">
+          ${cutting(lead.cover, lead.short)}
+          <div style="display:grid;gap:12px">
+            <div class="cols" style="column-count:1"><p class="drop">${esc(lead.lede)}</p></div>
+            <div class="figures"><div><b>+205%</b><span>Application page visits</span></div><div><b>+47%</b><span>Enrolment starts</span></div><div><b>+49%</b><span>Calls booked</span></div></div>
+            <span class="more">Read the full story <span aria-hidden="true">→</span></span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <div class="sechead"><h2>More case studies</h2></div>
+  <section class="stories">${rest.map(p=>`
+    <a href="#${p.id}">
+      <span class="kicker">${esc(p.industry)} · ${esc(p.client)}</span>
+      ${cutting(p.cover, p.short)}
+      <h3>${esc(p.headline)}</h3>
+      <p>${esc(p.summary)}</p>
+      <span class="more">Read case study <span aria-hidden="true">→</span></span>
+    </a>`).join("")}
+  </section>
+  <a href="#process" class="strip">
+    <div class="strip-head"><span class="kicker">Inside this edition</span><h3>How the work gets done</h3></div>
+    <p>Four stages from research to handover, and the methods behind every case study.</p>
+    <span class="more">See my process <span aria-hidden="true">→</span></span>
+  </a>
+
+  <div class="sechead"><h2>Letters to the editor</h2></div>
+  <section class="letters">${TESTIMONIALS.map(q=>`
+    <article>
+      <h3>“${esc(q.h)}”</h3>
+      <p>${esc(q.t)}</p>
+      <div class="sig">${cutting(q.photo, q.by, true)}<div><b>${esc(q.by)}</b><span>${esc(q.role)}</span></div></div>
+    </article>`).join("")}
+  </section>
+
+  <section class="desk">
+    <div class="note">
+      <span class="kicker">From the desk of Joshua</span>
+      <h2 style="font-size:clamp(28px,3.4vw,40px);margin-top:6px">Thanks for reading</h2>
+      <div class="cols">
+        <p class="drop">I've spent years on products in financial technology, simplifying complex flows and building with user-centred design, plus a little gamification where it helps.</p>
+        <p>Colleagues describe me as dedicated, animated, focused and fun. When I bribe them with cupcakes or deliver early, they describe me as awesome.</p>
+        <p>Thanks for your time. If there's anything else you'd like to know, ask.</p>
+      </div>
+    </div>
+    <div class="classified">${adBox()}</div>
+  </section>`;
+}
+
+function adBox(big){
+  return `<div class="ad">
+    <span class="kicker">Classified · Situations wanted</span>
+    <h3>${big?"Let's talk.":"Designer available"}</h3>
+    <p>Product designer and engineer seeks an exciting project. Fintech, banking, SaaS and growth teams preferred. Works remotely from Canada.</p>
+    <span class="addr" id="addr">${EMAIL}</span>
+    <div class="btns"><button class="btn solid" id="copy" type="button">Copy email</button><a class="btn ghost" href="https://www.linkedin.com/in/joshuanwabogor/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
+    <span class="toast" id="toast" aria-live="polite"></span>
+  </div>`;
+}
+
+function viewCase(p){
+  const i = PROJECTS.indexOf(p), nx = PROJECTS[(i+1)%PROJECTS.length];
+  const facts = [["Client",p.client],["Role",p.role],["Year",p.year],["Industry",p.industry],...(p.meta||[])].filter(m=>m[1]);
+  let n = 0;
+  const secs = p.sections.map((s,si)=>{
+    const figs = s.figs ? `<div class="figs ${s.figsTwo?"two":""}">${s.figs.map(f=>patch(f[0], f[1], {num:++n, cls:f[2]||"", max:.6})).join("")}</div>` : "";
+    const ps = (s.p||[]).map((x,pi)=>`<p class="${si===0&&pi===0?"drop":""}">${esc(x)}</p>`).join("");
+    return `<div class="blk"><h2>${esc(s.h)}</h2><div class="txt">
+      ${ps}
+      ${s.list?`<ul>${s.list.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+      ${s.callout?`<div class="callout"><b>The brief</b><p>${esc(s.callout)}</p></div>`:""}
+      ${s.pills?`<p class="pills">${s.pills.map(x=>`<span class="pill">${esc(x)}</span>`).join("")}</p>`:""}
+      ${(s.html||"").replace(/class="btns"/g,'class="btns l"')}
+    </div>${figs}</div>`;
+  }).join("");
+  return `
+  <a class="back" href="#work">← Front page</a>
+  <header class="art-head">
+    <span class="kicker">Page ${i+2} · ${esc(p.short)}</span>
+    <h1>${esc(p.headline)}</h1>
+    <p class="deck">${esc(p.lede)}</p>
+    <div class="byline">By Joshua Nwabogor · ${esc(p.role)} · ${meta(p)}</div>
+  </header>
+  <dl class="facts">${facts.map(m=>`<div><dt>${esc(m[0])}</dt><dd>${esc(m[1])}</dd></div>`).join("")}</dl>
+  <div class="art-hero">${patch(p.hero||p.cover, p.title, {max:.5, tape:"t2"})}</div>
+  <div class="art-body">
+    ${secs}
+    ${p.locked?`<div class="blk"><h2>Full story</h2><div class="txt"><p class="notice">This project is under NDA. I'm happy to walk through it on a call. <a href="#contact">Get in touch</a>.</p></div></div>`:""}
+  </div>
+  <a class="next" href="#${nx.id}"><span class="kicker">Next story · Page ${(i+1)%PROJECTS.length+2}</span><h3>${esc(nx.headline)}</h3><span class="more" style="justify-self:center">Next case study <span aria-hidden="true">→</span></span></a>`;
+}
+
+function viewProcess(){
+  const phases = [
+    ["Research + discover","Find out what's really going on before deciding what to build.",["Contextual inquiry","Stakeholder interviews","Market research","Competition analysis","User research","Developing hypotheses"]],
+    ["Define + ideate","Turn findings into structure: who it's for, what they need, where things live.",["Heat mapping","Scroll tracking","Eye tracking","Click heatmaps","Affinity mapping","Card sorting & tree testing","Site mapping","Personas","User flows & journeys","Experience mapping"]],
+    ["Design + test","Make it, put it in front of people, and change it.",["A/B testing","Sketching & paper prototypes","Wireframes","Style guides","Usability testing","Branding","Figma","Adobe XD","InVision","Principle"]],
+    ["Deliver + hand over","Give engineering everything it needs to build it right.",["Hi-fi prototyping","Design systems","Wireframe annotation","Design presentations","HTML / CSS"]]
+  ];
+  return `
+  <header class="feature-head">
+    <span class="kicker">Feature · How the work gets done</span>
+    <h1>Simple at its core, adapted to every project</h1>
+    <p class="deck" style="max-width:52ch">The approach changes with the nature and scope of each project, but it always moves through these four stages.</p>
+  </header>
+  <div style="max-width:980px;margin:34px auto 30px"><figure class="patch t2 sketchfig" style="--tilt:-.5deg"><div class="sketch"><svg class="sk-wide" viewBox="0 0 1100 330" role="img" aria-label="Process: empathise or discover, then ideate or define, then design and test in a loop, then deliver"><defs>
+  <filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+  <marker id="ah" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M1.5,1.5 L10,6 L1.5,10.5" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="ahr" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M1.5,1.5 L10,6 L1.5,10.5" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<g filter="url(#rough)" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round">
+  <path d="M195,190 C240,232 300,226 335,180" stroke-dasharray="11 9" marker-end="url(#ah)"/>
+  <path d="M510,190 C548,232 600,226 628,182" stroke-dasharray="11 9" marker-end="url(#ah)"/>
+  <path d="M858,170 C890,128 930,130 955,160" stroke-dasharray="11 9" marker-end="url(#ah)"/>
+  <path d="M676,86 C622,128 618,212 664,256" stroke="var(--red)" marker-end="url(#ahr)"/>
+  <path d="M806,268 C862,226 864,140 820,82" stroke="var(--red)" marker-end="url(#ahr)"/>
+  <path d="M1000,232 C1040,226 1070,230 1088,224"/>
+</g>
+<text x="110" y="150" class="hw">empathise</text><text x="110" y="188" class="hw">or</text><text x="110" y="226" class="hw">discover</text><g class="num"><ellipse cx="110" cy="88" rx="19" ry="16" transform="rotate(-8 110 88)"/><text x="110" y="95">I</text></g>
+<text x="420" y="150" class="hw">ideate</text><text x="420" y="188" class="hw">or</text><text x="420" y="226" class="hw">define</text><g class="num"><ellipse cx="420" cy="88" rx="19" ry="16" transform="rotate(-8 420 88)"/><text x="420" y="95">II</text></g>
+<text x="740" y="140" class="hw">design</text><text x="740" y="178" class="hw">+</text><text x="740" y="216" class="hw">test</text>
+<g class="num"><ellipse cx="740" cy="60" rx="21" ry="16" transform="rotate(-8 740 60)"/><text x="740" y="67">III</text></g>
+<text x="740" y="312" class="hw red sm">repeat until it works</text>
+<text x="1040" y="205" class="hw">deliver</text><g class="num"><ellipse cx="1040" cy="140" rx="19" ry="16" transform="rotate(-8 1040 140)"/><text x="1040" y="147">IV</text></g>
+</svg><svg class="sk-tall" viewBox="0 0 360 900" role="img" aria-label="Process: empathise or discover, then ideate or define, then design and test in a loop, then deliver"><defs>
+  <filter id="rough2" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+  <marker id="ah2" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M1.5,1.5 L10,6 L1.5,10.5" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="ahr2" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M1.5,1.5 L10,6 L1.5,10.5" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<g filter="url(#rough2)" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round">
+  <path d="M120,215 C90,250 95,285 140,310" stroke-dasharray="11 9" marker-end="url(#ah2)"/>
+  <path d="M120,445 C90,480 95,510 140,535" stroke-dasharray="11 9" marker-end="url(#ah2)"/>
+  <path d="M240,580 C300,610 305,700 260,735" stroke="var(--red)" marker-end="url(#ahr2)"/>
+  <path d="M120,745 C60,715 58,625 100,588" stroke="var(--red)" marker-end="url(#ahr2)"/>
+  <path d="M230,770 C265,790 268,810 230,830" stroke-dasharray="11 9" marker-end="url(#ah2)"/>
+</g>
+<text x="180" y="120" class="hw">empathise</text><text x="180" y="158" class="hw">or</text><text x="180" y="196" class="hw">discover</text><g class="num"><ellipse cx="60" cy="80" rx="19" ry="16" transform="rotate(-8 60 80)"/><text x="60" y="87">I</text></g>
+<text x="180" y="355" class="hw">ideate</text><text x="180" y="393" class="hw">or</text><text x="180" y="431" class="hw">define</text><g class="num"><ellipse cx="60" cy="315" rx="19" ry="16" transform="rotate(-8 60 315)"/><text x="60" y="322">II</text></g>
+<text x="180" y="625" class="hw">design</text><text x="180" y="663" class="hw">+</text><text x="180" y="701" class="hw">test</text>
+<g class="num"><ellipse cx="44" cy="660" rx="21" ry="16" transform="rotate(-8 44 660)"/><text x="44" y="667">III</text></g>
+<text x="320" y="665" class="hw red sm" transform="rotate(90 320 665)">repeat until it works</text>
+<text x="180" y="878" class="hw">deliver</text>
+<g class="num"><ellipse cx="80" cy="868" rx="21" ry="16" transform="rotate(-8 80 868)"/><text x="80" y="875">IV</text></g>
+</svg></div><figcaption><b>Fig. 1</b><span>The design process, as I sketch it for every new team</span></figcaption></figure></div>
+  <section class="steps">${phases.map((ph,i)=>`
+    <div><b>${["I","II","III","IV"][i]}</b><h3>${esc(ph[0])}</h3><p>${esc(ph[1])}</p>
+    <p class="pills" style="font-style:normal">${ph[2].map(x=>`<span class="pill">${esc(x)}</span>`).join("")}</p></div>`).join("")}
+  </section>
+  <section class="desk" style="border-bottom:0"><div class="note" style="border-right:0"></div><div class="classified">${adBox()}</div></section>`;
+}
+
+function viewAbout(){
+  return `
+  <header class="feature-head">
+    <span class="kicker">Profile</span>
+    <h1>The designer who builds what he draws</h1>
+    <p class="deck" style="max-width:52ch">Joshua Nwabogor on people-first products, fintech, and designing with the build in mind.</p>
+  </header>
+  <section class="profile">
+    ${patch("Group-2.webp","Joshua Nwabogor",{tilt:-1.6,tape:"t2"})}
+    <div>
+      <div class="cols">
+        <p class="drop">I'm a senior product designer and engineer. I spot opportunities and turn them into sketches, prototypes and shipped products.</p>
+        <p>I've spent years building digital products for B2B and B2C services across fintech, healthcare, edtech, SaaS and enterprise, for platforms used by more than 18 million people in the US, UK and West Africa. My focus is user-centred design, brand identity, and interfaces for websites, dashboards and mobile apps.</p>
+        <p>People sit at the centre of every solution. I work from real-user insight and behaviour, and I care about products that let people connect directly with the brands they use.</p>
+        <p>I also bring experience in digital marketing and web development, so I design with the build in mind.</p>
+      </div>
+      <div class="skills">
+        <div><h4>Practice</h4><ul><li>User research</li><li>User testing</li><li>A/B testing</li><li>Design thinking</li><li>User stories &amp; journeys</li></ul></div>
+        <div><h4>Craft</h4><ul><li>Wireframing</li><li>UX design</li><li>Visual / UI design</li><li>Prototyping</li><li>Design systems</li></ul></div>
+        <div><h4>Tools</h4><ul><li>Figma</li><li>Sketch</li><li>Adobe XD</li><li>InVision</li><li>Principle</li></ul></div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function viewContact(){
+  return `
+  <section class="contact">
+    <span class="kicker">Contact</span>
+    ${adBox(true)}
+    <div class="cgrid">
+      <div><span class="kicker">Location</span><p>Canada.<br>Working remotely from anywhere.</p></div>
+      <div><span class="kicker">Elsewhere</span>
+        <a href="https://www.linkedin.com/in/joshuanwabogor/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://www.behance.net/joshbogs/" target="_blank" rel="noopener">Behance ↗</a>
+        <a href="https://twitter.com/josh_bogs" target="_blank" rel="noopener">X / Twitter ↗</a>
+        <a href="https://www.instagram.com/josh.bogs/" target="_blank" rel="noopener">Instagram ↗</a></div>
+      <div><span class="kicker">Good fit</span><p>Fintech and banking, SaaS and enterprise tools, conversion work on growth teams.</p></div>
+    </div>
+  </section>`;
+}
+
+function renderResults(){
+  const el=document.getElementById("results"); if(!el) return;
+  const max=16;
+  el.innerHTML=`<div class="res"><div class="leg"><span><i class="c"></i>Control</span><span><i class="v"></i>Variation 1</span></div>`+
+   RESULTS.map(([l,c,v])=>{
+     const lift = c>0 ? "+"+Math.round((v-c)/c*100)+"%" : "—";
+     return `<div class="row"><div class="lbl">${esc(l)}</div><div class="bars">
+       <div class="bar c" style="width:${c/max*82}%"><span>${c.toFixed(2)}%</span></div>
+       <div class="bar v" style="width:${v/max*82}%"><span>${v.toFixed(2)}%</span></div></div>
+       <div class="lift">${lift}</div></div>`;}).join("")+`</div>`;
+}
+
+/* ---------- Router + page turn ---------- */
+const app = document.getElementById("app");
+const nav = document.querySelector(".navbar");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let firstPaint = true;
+
+function viewFor(id){
+  const p = PROJECTS.find(x=>x.id===id);
+  if (p) return [viewCase(p), "work", `${p.short} · Joshua Nwabogor`];
+  if (id==="process") return [viewProcess(),"process","Process · Joshua Nwabogor"];
+  if (id==="about") return [viewAbout(),"about","Profile · Joshua Nwabogor"];
+  if (id==="contact") return [viewContact(),"contact","Contact · Joshua Nwabogor"];
+  return [viewWork(),"work","Joshua Nwabogor"];
+}
+
+function turnPage(render){
+  if (reduce || firstPaint){ render(); return; }
+  const top = Math.max(0, nav.getBoundingClientRect().bottom);
+  const r = app.getBoundingClientRect();
+  const leaf = document.createElement("div");
+  leaf.className = "leaf"; leaf.style.top = top+"px";
+  const copy = app.cloneNode(true);
+  copy.removeAttribute("id");
+  Object.assign(copy.style,{position:"absolute",left:r.left+"px",top:(r.top-top)+"px",width:r.width+"px",margin:"0"});
+  leaf.appendChild(copy);
+  const sh=document.createElement("div"); sh.className="shade"; leaf.appendChild(sh);
+  document.body.appendChild(leaf);
+  render();
+  app.classList.remove("under"); void app.offsetWidth; app.classList.add("under");
+  const done=()=>leaf.remove();
+  leaf.addEventListener("animationend", e=>{ if(e.target===leaf) done(); });
+  setTimeout(done, 1400);
+}
+
+function route(){
+  const id = (location.hash||"#work").slice(1) || "work";
+  const [html, navId, title] = viewFor(id);
+  turnPage(()=>{
+    app.innerHTML = html;
+    if (firstPaint) app.classList.add("first");
+    window.scrollTo({top:0, behavior:"instant"});
+    document.querySelectorAll("[data-nav]").forEach(a=>{ if(a.dataset.nav===navId) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+    document.title = title;
+    renderResults();
+    const btn = document.getElementById("copy");
+    if (btn) btn.addEventListener("click", ()=>{
+      const toast = document.getElementById("toast");
+      const fallback = ()=>{ const rg=document.createRange(); rg.selectNodeContents(document.getElementById("addr")); const s=getSelection(); s.removeAllRanges(); s.addRange(rg); toast.textContent="Selected. Press Ctrl/Cmd+C to copy"; };
+      try { navigator.clipboard.writeText(EMAIL).then(()=>toast.textContent="Copied to clipboard", fallback); } catch(e){ fallback(); }
+    });
+  });
+  firstPaint = false;
+}
+document.getElementById("today").textContent = new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+addEventListener("scroll", ()=>document.body.classList.toggle("scrolled", nav.getBoundingClientRect().top<=1 && scrollY>40), {passive:true});
+addEventListener("hashchange", route);
+route();
+</script>
